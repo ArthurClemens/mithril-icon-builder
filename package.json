@@ -1,11 +1,15 @@
 {
   "name": "mithril-icon-builder",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Converts Material Design SVG icons to Mithril elements.",
   "scripts": {
-    "prebuild": "rm -rf ./build/google-material-design-icons",
-    "create-icons": "node build.js --output-dir build/google-material-design-icons --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
-    "build": "npm run create-icons"
+    "cleanup": "rm -rf ./build && rm -rf ./external-repos",
+    "init": "npm run cleanup && npm run get-external-repos",
+    "get-external-repos": "node scripts/get-external-repos.js",
+    "build-google": "node build.js --output-dir build/google --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
+    "build-zavoloklom": "node build.js --output-dir build/zavoloklom --svg-dir ./node_modules/material-design-iconic-font/svg --renameFilter ./filters/rename/zavokolom.js",
+    "build-templarian": "node build.js --output-dir build/templarian --svg-dir ./external-repos/MaterialDesign/icons/svg",
+    "build": "npm run build-google && npm run build-zavoloklom && npm run build-templarian"
   },
   "keywords": [
     "Material Design",
@@ -17,7 +21,9 @@
     "url": "https://github.com/ArthurClemens/mithril-icon-builder"
   },
   "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
-  "contributors": ["Hai Nguyen"],
+  "contributors": [
+    "Hai Nguyen"
+  ],
   "license": "MIT",
   "dependencies": {
     "yargs": "^3.15.0"
@@ -27,9 +33,11 @@
     "babel": "^5.6.1",
     "glob": "^5.0.14",
     "lodash": "^3.10.0",
+    "material-design-iconic-font": "github:arthurclemens/material-design-iconic-font",
     "material-design-icons": "^2.0.0",
     "mkdirp": "^0.5.1",
     "mustache": "^2.1.2",
-    "rimraf": "^2.4.0"
+    "rimraf": "^2.4.0",
+    "shelljs": "^0.5.3"
   }
 }

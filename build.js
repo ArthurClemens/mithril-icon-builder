@@ -18,7 +18,6 @@ var glob = require('glob');
 var mkdirp = require('mkdirp');
 
 const RENAME_FILTER_DEFAULT = './filters/rename/default';
-const RENAME_FILTER_MDI = './filters/rename/material-design-icons';
 
 const DEFAULT_OPTIONS = {
     glob: '/**/*.svg',
@@ -84,19 +83,31 @@ function main(options, cb) {
  * Absolute path to svg file to process.
  *
  * @param {string} destPath
- * Path to es6 file relative to {options.outputDir}
+ * Path to js file relative to {options.outputDir}
  *
  * @param {object} options
  */
 function processFile(svgPath, destPath, options) {
-    var outputFileDir = path.dirname(path.join(options.outputDir, destPath));
-    if (!fs.existsSync(outputFileDir)) {
-        console.log('Making dir: ' + outputFileDir);
-        mkdirp.sync(outputFileDir);
+    var outputDirJs = options.outputDir + '/msvg';
+    var outputFileDirJs = path.dirname(path.join(outputDirJs, destPath));
+    if (!fs.existsSync(outputFileDirJs)) {
+        console.log('Making dir: ' + outputFileDirJs);
+        mkdirp.sync(outputFileDirJs);
     }
+
     var fileString = getFileString(svgPath, destPath, options);
-    var absDestPath = path.join(options.outputDir, destPath);
-    fs.writeFileSync(absDestPath, fileString);
+    var absDestPathJs = path.join(outputDirJs, destPath);
+    fs.writeFileSync(absDestPathJs, fileString);
+
+    // also copy SVG file
+    var outputDirSvg = options.outputDir + '/svg';
+    var destPathSvg = destPath.replace(/.js$/, '.svg');
+    var outputFileDirSvg = path.dirname(path.join(outputDirSvg, destPathSvg));
+    if (!fs.existsSync(outputFileDirSvg)) {
+        mkdirp.sync(outputFileDirSvg);
+    }
+    var absDestPathSvg = path.join(outputDirSvg, destPathSvg);
+    fs.createReadStream(svgPath).pipe(fs.createWriteStream(absDestPathSvg));
 }
 
 
@@ -116,16 +127,27 @@ function pascalCase(destPath) {
     return className;
 }
 
+function cleanupSVG(svgString) {
+    svgString = svgString.replace(/\n|\r/g, ' ');
+    svgString = svgString.replace(/ +/g, ' ');
+    svgString = svgString.replace(/> </g, '><');
+    svgString = svgString.replace(/ $/, '');
+    svgString = svgString.replace(/^ /, '');
+    return svgString;
+}
+
 function getFileString(svgPath, destPath, options) {
     var className = pascalCase(destPath);
     var data = fs.readFileSync(svgPath, {
         encoding: 'utf8'
     });
-    var template = fs.readFileSync(path.join(__dirname, 'template/svg-icon.js'), {
+    svgData = cleanupSVG(data);
+
+    var template = fs.readFileSync(path.join(__dirname, './template/msvg.js'), {
         encoding: 'utf8'
     });
     //Extract the paths from the svg string
-    var paths = data.slice(data.indexOf('>') + 1);
+    var paths = svgData.slice(svgData.indexOf('>') + 1);
     paths = paths.slice(0, -6);
     //clean xml paths
     paths = paths.replace('xlink:href="#a"', '');
@@ -133,7 +155,7 @@ function getFileString(svgPath, destPath, options) {
 
     return Mustache.render(
         template, {
-            svg: data,
+            svg: svgData,
             paths: paths,
             className: className
         }
@@ -150,6 +172,5 @@ module.exports = {
     getFileString: getFileString,
     processFile: processFile,
     main: main,
-    RENAME_FILTER_DEFAULT: RENAME_FILTER_DEFAULT,
-    RENAME_FILTER_MDI: RENAME_FILTER_MDI
+    RENAME_FILTER_DEFAULT: RENAME_FILTER_DEFAULT
 };
