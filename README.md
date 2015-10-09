@@ -1,9 +1,11 @@
 # Mithril icon builder
 
-Largely copied from [callemall/material-ui](https://github.com/callemall/material-ui).
+Converts SVG icons to Mithril elements.
+
+Largely copied from [callemall/material-ui](https://github.com/callemall/material-ui) and modified for Mithril.
 
 This tool crawls the [material-design-icons](https://github.com/google/material-design-icons) repo
-and generates a Mithril component for each icon.
+and generates a Mithril element for each icon.
 
 ## Running the build
 ```sh
@@ -21,7 +23,7 @@ Files are written to `dist`.
 
 You can build your own SVG icons as well as collections like [game-icons](http://game-icons.net/) through environmental variables.
 
-* `--output-dir` - directory to output components
+* `--output-dir` - directory to output elements
 * `--svg-dir` - SVG directory
 * `--inner-path` - "Reach into" subdirs, since libraries like material-design-icons
   use arbitrary build directories to organize icons

@@ -1,12 +1,12 @@
 {
   "name": "mithril-icon-builder",
   "version": "0.0.1",
-  "description": "Converts Material Design SVG icons to Mithril components.",
+  "description": "Converts Material Design SVG icons to Mithril elements.",
   "scripts": {
-    "prebuild": "rm -rf ./dist/material-design-icons",
-    "create-icons": "node build.js --output-dir dist/material-design-icons/es6 --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
-    "es6-to-js": "babel --stage 1 dist/material-design-icons/es6 --out-dir dist/material-design-icons/js",
-    "rename-es6-to-js": "renamer --find '.es6.js' --replace '.js' 'dist/material-design-icons/js/**/*.js'",
+    "prebuild": "rm -rf ./dist/google-material-design-icons",
+    "create-icons": "node build.js --output-dir dist/google-material-design-icons/es6 --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
+    "es6-to-js": "babel --stage 1 dist/google-material-design-icons/es6 --out-dir dist/google-material-design-icons/js",
+    "rename-es6-to-js": "renamer --find '.es6.js' --replace '.js' 'dist/google-material-design-icons/js/**/*.js'",
     "build": "npm run create-icons && npm run es6-to-js && npm run rename-es6-to-js"
   },
   "keywords": [
@@ -16,9 +16,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/ArthurClemens/mithril-icon-builder"
   },
-  "author": "Arthur Clemens",
+  "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
   "contributors": ["Hai Nguyen"],
   "license": "MIT",
   "dependencies": {
