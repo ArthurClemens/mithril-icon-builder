@@ -19,7 +19,7 @@ function defaultDestRewriter(pathObj, innerPath, options) {
     if (options.fileSuffix) {
         fileName.replace(options.fileSuffix, '.svg');
     } else {
-        fileName = fileName.replace('.svg', '.es6.js');
+        fileName = fileName.replace('.svg', '.js');
     }
     fileName = fileName.replace(/_/g, '-');
     return path.join(innerPath, fileName);

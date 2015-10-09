@@ -4,7 +4,7 @@ function myDestRewriter(pathObj, innerPath, options) {
 
     var rewrittenInnerPath = innerPath.replace('/svg/production', '');
 
-    fileName = fileName.replace('_24px.svg', '.es6.js');
+    fileName = fileName.replace('_24px.svg', '.js');
     fileName = fileName.slice(3);
     fileName = fileName.replace(/_/g, '-');
 

@@ -6,7 +6,7 @@
  *
  * Usage:
  *
- * node ./build.es6.js --help
+ * node ./build.js --help
  *
  */
 var fs = require('fs');
@@ -112,7 +112,7 @@ function processFile(svgPath, destPath, options) {
  */
 function pascalCase(destPath) {
     var splitregex = new RegExp('[' + path.sep + '-]+');
-    var parts = destPath.replace('.es6.js', '').split(splitregex);
+    var parts = destPath.replace('.js', '').split(splitregex);
     parts = _.map(parts, function(part) {
         return part.charAt(0).toUpperCase() + part.substring(1);
     });
@@ -125,7 +125,7 @@ function getFileString(svgPath, destPath, options) {
     var data = fs.readFileSync(svgPath, {
         encoding: 'utf8'
     });
-    var template = fs.readFileSync(path.join(__dirname, 'template/svg-icon.es6.js'), {
+    var template = fs.readFileSync(path.join(__dirname, 'template/svg-icon.js'), {
         encoding: 'utf8'
     });
     //Extract the paths from the svg string
