@@ -1,6 +1,6 @@
 {
   "name": "mithril-icon-builder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Converts Material Design SVG icons to Mithril elements.",
   "scripts": {
     "cleanup": "rm -rf ./build && rm -rf ./external-repos",

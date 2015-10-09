@@ -128,9 +128,11 @@ function pascalCase(destPath) {
 }
 
 function cleanupSVG(svgString) {
+    svgString = svgString.replace(/<!DOCTYPE.*?>/, '');
+    svgString = svgString.replace(/<?xml.*?>/, '');
     svgString = svgString.replace(/\n|\r/g, ' ');
     svgString = svgString.replace(/ +/g, ' ');
-    svgString = svgString.replace(/> </g, '><');
+    svgString = svgString.replace(/> +</g, '><');
     svgString = svgString.replace(/ $/, '');
     svgString = svgString.replace(/^ /, '');
     return svgString;
