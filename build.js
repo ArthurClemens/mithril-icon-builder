@@ -22,7 +22,6 @@ const RENAME_FILTER_MDI = './filters/rename/material-design-icons';
 
 const DEFAULT_OPTIONS = {
     glob: '/**/*.svg',
-    innerPath: '',
     renameFilter: RENAME_FILTER_DEFAULT
 };
 
@@ -34,9 +33,6 @@ function parseArgs() {
         .demand('svg-dir')
             .describe('svg-dir', 'SVG directory')
         .describe('glob', 'Glob to match inside of --svg-dir. Default **/*.svg')
-        .describe('inner-path', 'Reach into subdirs, since libraries like material-design-icons' +
-            ' use arbitrary build directories to organize icons' +
-            ' e.g. action / svg / production / icon_3d_rotation_24px.svg')
         .describe('rename-filter', 'Path to JS module used to rename destination filename and path. Default: ' + RENAME_FILTER_DEFAULT)
         .argv;
 }
