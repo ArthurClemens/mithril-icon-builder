@@ -3,11 +3,9 @@
   "version": "0.0.1",
   "description": "Converts Material Design SVG icons to Mithril elements.",
   "scripts": {
-    "prebuild": "rm -rf ./dist/google-material-design-icons",
-    "create-icons": "node build.js --output-dir dist/google-material-design-icons/es6 --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
-    "es6-to-js": "babel --stage 1 dist/google-material-design-icons/es6 --out-dir dist/google-material-design-icons/js",
-    "rename-es6-to-js": "renamer --find '.es6.js' --replace '.js' 'dist/google-material-design-icons/js/**/*.js'",
-    "build": "npm run create-icons && npm run es6-to-js && npm run rename-es6-to-js"
+    "prebuild": "rm -rf ./build/google-material-design-icons",
+    "create-icons": "node build.js --output-dir build/google-material-design-icons --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
+    "build": "npm run create-icons"
   },
   "keywords": [
     "Material Design",
@@ -27,20 +25,11 @@
   "peerDependencies": {},
   "devDependencies": {
     "babel": "^5.6.1",
-    "chai": "^3.0.0",
     "glob": "^5.0.14",
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-mocha-test": "^0.12.7",
-    "load-grunt-tasks": "^3.2.0",
     "lodash": "^3.10.0",
     "material-design-icons": "^2.0.0",
     "mkdirp": "^0.5.1",
-    "mocha": "^2.2.5",
     "mustache": "^2.1.2",
-    "renamer": "^0.5.6",
-    "rimraf": "^2.4.0",
-    "temp": "^0.8.3"
+    "rimraf": "^2.4.0"
   }
 }
