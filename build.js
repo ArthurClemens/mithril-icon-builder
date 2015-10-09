@@ -129,12 +129,12 @@ function pascalCase(destPath) {
 
 function cleanupSVG(svgString) {
     svgString = svgString.replace(/<!DOCTYPE.*?>/, '');
-    svgString = svgString.replace(/<?xml.*?>/, '');
-    svgString = svgString.replace(/\n|\r/g, ' ');
-    svgString = svgString.replace(/ +/g, ' ');
-    svgString = svgString.replace(/> +</g, '><');
-    svgString = svgString.replace(/ $/, '');
-    svgString = svgString.replace(/^ /, '');
+    svgString = svgString.replace(/<\?xml .*?>/, '');
+    svgString = svgString.replace(/\n|\r|\t/g, ' ');
+    svgString = svgString.replace(/\s+/g, ' ');
+    svgString = svgString.replace(/>\s+</g, '><');
+    svgString = svgString.replace(/\s+$/, '');
+    svgString = svgString.replace(/^\s+/, '');
     return svgString;
 }
 
