@@ -16,6 +16,8 @@ var Mustache = require('mustache');
 var _ = require('lodash');
 var glob = require('glob');
 var mkdirp = require('mkdirp');
+var sh = require('shelljs');
+var async = require('async');
 
 const RENAME_FILTER_DEFAULT = './filters/rename/default';
 
@@ -59,15 +61,20 @@ function main(options, cb) {
 
     mkdirp(options.outputDir);
     var files = glob.sync(path.join(options.svgDir, options.glob));
-    _.each(files, function(svgPath) {
+    var cwd = sh.pwd();
+    console.log('cwd', cwd);
+    var asyncTasks = [];
+    async.each(files, function(svgPath) {
         var svgPathObj = path.parse(svgPath);
         var innerPath = path.dirname(svgPath)
             .replace(options.svgDir, '')
-            .replace(path.relative(process.cwd(), options.svgDir), ''); // for relative dirs
+            .replace(path.relative(cwd, options.svgDir), ''); // for relative dirs
         var destPath = renameFilter(svgPathObj, innerPath, options);
-
-        processFile(svgPath, destPath, options);
+        asyncTasks.push(function() {
+            processFile(svgPath, destPath, options);
+        });
     });
+    async.parallel(asyncTasks);
 
     if (cb) {
         cb();

@@ -30,6 +30,7 @@
   },
   "peerDependencies": {},
   "devDependencies": {
+    "async": "^1.4.2",
     "babel": "^5.6.1",
     "glob": "^5.0.14",
     "lodash": "^3.10.0",
