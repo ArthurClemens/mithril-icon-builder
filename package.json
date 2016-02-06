@@ -1,6 +1,6 @@
 {
   "name": "mithril-icon-builder",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Converts Material Design SVG icons to Mithril elements.",
   "scripts": {
     "cleanup": "rm -rf ./build && rm -rf ./external-repos",
@@ -9,7 +9,8 @@
     "build-google": "node build.js --output-dir build/google --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
     "build-zavoloklom": "node build.js --output-dir build/zavoloklom --svg-dir ./node_modules/material-design-iconic-font/svg --renameFilter ./filters/rename/zavokolom.js",
     "build-templarian": "node build.js --output-dir build/templarian --svg-dir ./external-repos/MaterialDesign/icons/svg",
-    "build": "npm run build-google && npm run build-zavoloklom && npm run build-templarian"
+    "build-custom": "node build.js --output-dir build/custom --svg-dir ./custom",
+    "build": "npm run build-google && npm run build-zavoloklom && npm run build-templarian && npm run build-custom"
   },
   "keywords": [
     "Material Design",
@@ -30,15 +31,15 @@
   },
   "peerDependencies": {},
   "devDependencies": {
-    "async": "^1.4.2",
-    "babel": "^5.6.1",
+    "async": "^1.5.2",
+    "babel": "^5.8.35",
     "glob": "^5.0.14",
     "lodash": "^3.10.0",
     "material-design-iconic-font": "github:arthurclemens/material-design-iconic-font",
-    "material-design-icons": "^2.0.0",
+    "material-design-icons": "^2.1.3",
     "mkdirp": "^0.5.1",
-    "mustache": "^2.1.2",
-    "rimraf": "^2.4.0",
+    "mustache": "^2.2.1",
+    "rimraf": "^2.5.1",
     "shelljs": "^0.5.3"
   }
 }

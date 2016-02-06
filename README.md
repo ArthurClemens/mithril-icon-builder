@@ -16,6 +16,17 @@ These repositories are crawled:
 * [Templarian/MaterialDesign](https://github.com/Templarian/MaterialDesign)
 
 
+## Add your own SVGs
+
+Add other SVGs in the `custom` folder and run:
+
+~~~
+npm run build-custom
+~~~
+
+Find the result in `build/custom`.
+
+
 ## Using the icons
 
 The built files are in es5 module format and can be used in es5 and es6 projects.
