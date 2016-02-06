@@ -48,7 +48,6 @@ function main(options, cb) {
     }
 
     rimraf.sync(options.outputDir); // Clean old files
-    console.log('** Starting Build');
     var dirs = fs.readdirSync(options.svgDir);
 
     var renameFilter = options.renameFilter;
@@ -62,19 +61,22 @@ function main(options, cb) {
     mkdirp(options.outputDir);
     var files = glob.sync(path.join(options.svgDir, options.glob));
     var cwd = sh.pwd();
-    console.log('cwd', cwd);
-    var asyncTasks = [];
-    async.each(files, function(svgPath) {
+    var tasks = [];
+    files.forEach(function(svgPath) {
         var svgPathObj = path.parse(svgPath);
         var innerPath = path.dirname(svgPath)
             .replace(options.svgDir, '')
             .replace(path.relative(cwd, options.svgDir), ''); // for relative dirs
         var destPath = renameFilter(svgPathObj, innerPath, options);
-        asyncTasks.push(function() {
-            processFile(svgPath, destPath, options);
+        tasks.push({
+            svgPath: svgPath,
+            destPath: destPath,
+            options: options
         });
     });
-    async.parallel(asyncTasks);
+    tasks.forEach(function(task) {
+        processFile(task.svgPath, task.destPath, task.options);
+    });
 
     if (cb) {
         cb();
@@ -98,7 +100,6 @@ function processFile(svgPath, destPath, options) {
     var outputDirJs = options.outputDir + '/msvg';
     var outputFileDirJs = path.dirname(path.join(outputDirJs, destPath));
     if (!fs.existsSync(outputFileDirJs)) {
-        console.log('Making dir: ' + outputFileDirJs);
         mkdirp.sync(outputFileDirJs);
     }
 
@@ -114,7 +115,7 @@ function processFile(svgPath, destPath, options) {
         mkdirp.sync(outputFileDirSvg);
     }
     var absDestPathSvg = path.join(outputDirSvg, destPathSvg);
-    fs.createReadStream(svgPath).pipe(fs.createWriteStream(absDestPathSvg));
+    sh.cp(svgPath, absDestPathSvg);
 }
 
 
