@@ -20,7 +20,7 @@ var sh = require('shelljs');
 var async = require('async');
 var SVGO = require('svgo');
 var svgo = new SVGO({
-    plugins: ['removeComments', 'removeStyleElement', 'removeMetadata', 'cleanupIDs', 'removeXMLProcInst', 'removeDoctype']
+    plugins: ['removeComments', 'removeMetadata', 'cleanupIDs', 'removeXMLProcInst', 'removeDoctype']
 });
 var template = fs.readFileSync(path.join(__dirname, './template/msvg.js'), {
     encoding: 'utf8'
@@ -102,7 +102,6 @@ function cleanupSVG(svgString) {
     svgString = svgString.replace(/>\s+</g, '><');
     svgString = svgString.replace(/\s+$/, '');
     svgString = svgString.replace(/^\s+/, '');
-    svgString = svgString.replace(/<style.*?\/style>/g, '');
     return svgString;
 }
 
