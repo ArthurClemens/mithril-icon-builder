@@ -18,10 +18,6 @@ var glob = require('glob');
 var mkdirp = require('mkdirp');
 var sh = require('shelljs');
 var async = require('async');
-var SVGO = require('svgo');
-var svgo = new SVGO({
-    plugins: ['removeComments', 'removeMetadata', 'cleanupIDs', 'removeXMLProcInst', 'removeDoctype']
-});
 var template = fs.readFileSync(path.join(__dirname, './template/msvg.js'), {
     encoding: 'utf8'
 });
@@ -95,6 +91,7 @@ function main(options, cb) {
 }
 
 function cleanupSVG(svgString) {
+    svgString = svgString.replace(/<!--.*-->/g, '');
     svgString = svgString.replace(/<!DOCTYPE.*?>/, '');
     svgString = svgString.replace(/<\?xml .*?>/, '');
     svgString = svgString.replace(/\n|\r|\t/g, ' ');
@@ -122,16 +119,6 @@ function processFile(svgPath, destPath, options) {
     }
 
     processFileString(svgPath, destPath, outputDirJs, options);
-
-    // also copy SVG file
-    var outputDirSvg = options.outputDir + '/svg';
-    var destPathSvg = destPath.replace(/.js$/, '.svg');
-    var outputFileDirSvg = path.dirname(path.join(outputDirSvg, destPathSvg));
-    if (!fs.existsSync(outputFileDirSvg)) {
-        mkdirp.sync(outputFileDirSvg);
-    }
-    var absDestPathSvg = path.join(outputDirSvg, destPathSvg);
-    sh.cp(svgPath, absDestPathSvg);
 }
 
 
@@ -157,33 +144,25 @@ function processFileString(svgPath, destPath, outputDirJs, options) {
         encoding: 'utf8'
     });
 
-    var svgData = svgo.optimize(data, function(result) {
-        // svgo does not work completely satisfying....
-        var svgData = cleanupSVG(result.data);
+    var svgData = cleanupSVG(data);
 
-        //Extract the paths from the svg string
-        var paths = svgData.slice(svgData.indexOf('>') + 1);
-        paths = paths.slice(0, -6);
+    var fileString = Mustache.render(
+        template, {
+            svg: svgData
+        }
+    );
+    var absDestPathJs = path.join(outputDirJs, destPath);
+    fs.writeFileSync(absDestPathJs, fileString);
 
-        //clean xml paths
-        paths = paths.replace('xlink:href="#a"', '');
-        paths = paths.replace('xlink:href="#c"', '');
-
-        var fileString = Mustache.render(
-            template, {
-                svg: svgData,
-                paths: paths,
-                className: className
-            }
-        );
-        var absDestPathJs = path.join(outputDirJs, destPath);
-        fs.writeFileSync(absDestPathJs, fileString);
-    });
-
-
-
-
-
+    // write SVG file with cleaned data
+    var outputDirSvg = options.outputDir + '/svg';
+    var destPathSvg = destPath.replace(/.js$/, '.svg');
+    var outputFileDirSvg = path.dirname(path.join(outputDirSvg, destPathSvg));
+    if (!fs.existsSync(outputFileDirSvg)) {
+        mkdirp.sync(outputFileDirSvg);
+    }
+    var absDestPathSvg = path.join(outputDirSvg, destPathSvg);
+    fs.writeFileSync(absDestPathSvg, svgData);
 }
 
 if (require.main === module) {

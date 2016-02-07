@@ -27,6 +27,16 @@ npm run build-custom
 Find the result in `build/custom`.
 
 
+### Working with multi color SVGs
+
+If you are working with Adobe Illustrator, to preserve color styles in an SVG without getting CSS classname conflicts, follow these export steps:
+
+* Use "Save As", NOT "Export"
+* Choose SVG Profile 1.1
+* Select Advanced Options, CSS Properties: "Style Attributes"
+
+
+
 ## Using the icons
 
 The built files are in es5 module format and can be used in es5 and es6 projects.
