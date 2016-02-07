@@ -1,7 +1,7 @@
 {
   "name": "mithril-icon-builder",
-  "version": "0.0.6",
-  "description": "Converts Material Design SVG icons to Mithril elements.",
+  "version": "0.0.7",
+  "description": "Converts SVG icons to Mithril elements.",
   "scripts": {
     "cleanup": "rm -rf ./build && rm -rf ./external-repos",
     "init": "npm run cleanup && npm run get-external-repos",
