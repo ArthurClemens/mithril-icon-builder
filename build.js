@@ -18,6 +18,13 @@ var glob = require('glob');
 var mkdirp = require('mkdirp');
 var sh = require('shelljs');
 var async = require('async');
+var SVGO = require('svgo');
+var svgo = new SVGO({
+    plugins: ['removeComments', 'removeStyleElement', 'removeMetadata', 'cleanupIDs', 'removeXMLProcInst', 'removeDoctype']
+});
+var template = fs.readFileSync(path.join(__dirname, './template/msvg.js'), {
+    encoding: 'utf8'
+});
 
 const RENAME_FILTER_DEFAULT = './filters/rename/default';
 
@@ -87,6 +94,18 @@ function main(options, cb) {
     }
 }
 
+function cleanupSVG(svgString) {
+    svgString = svgString.replace(/<!DOCTYPE.*?>/, '');
+    svgString = svgString.replace(/<\?xml .*?>/, '');
+    svgString = svgString.replace(/\n|\r|\t/g, ' ');
+    svgString = svgString.replace(/\s+/g, ' ');
+    svgString = svgString.replace(/>\s+</g, '><');
+    svgString = svgString.replace(/\s+$/, '');
+    svgString = svgString.replace(/^\s+/, '');
+    svgString = svgString.replace(/<style.*?\/style>/g, '');
+    return svgString;
+}
+
 /*
  * @param {string} svgPath
  * Absolute path to svg file to process.
@@ -103,9 +122,7 @@ function processFile(svgPath, destPath, options) {
         mkdirp.sync(outputFileDirJs);
     }
 
-    var fileString = getFileString(svgPath, destPath, options);
-    var absDestPathJs = path.join(outputDirJs, destPath);
-    fs.writeFileSync(absDestPathJs, fileString);
+    processFileString(svgPath, destPath, outputDirJs, options);
 
     // also copy SVG file
     var outputDirSvg = options.outputDir + '/svg';
@@ -135,41 +152,39 @@ function pascalCase(destPath) {
     return className;
 }
 
-function cleanupSVG(svgString) {
-    svgString = svgString.replace(/<!DOCTYPE.*?>/, '');
-    svgString = svgString.replace(/<\?xml .*?>/, '');
-    svgString = svgString.replace(/\n|\r|\t/g, ' ');
-    svgString = svgString.replace(/\s+/g, ' ');
-    svgString = svgString.replace(/>\s+</g, '><');
-    svgString = svgString.replace(/\s+$/, '');
-    svgString = svgString.replace(/^\s+/, '');
-    return svgString;
-}
-
-function getFileString(svgPath, destPath, options) {
+function processFileString(svgPath, destPath, outputDirJs, options) {
     var className = pascalCase(destPath);
     var data = fs.readFileSync(svgPath, {
         encoding: 'utf8'
     });
-    svgData = cleanupSVG(data);
 
-    var template = fs.readFileSync(path.join(__dirname, './template/msvg.js'), {
-        encoding: 'utf8'
+    var svgData = svgo.optimize(data, function(result) {
+        // svgo does not work completely satisfying....
+        var svgData = cleanupSVG(result.data);
+
+        //Extract the paths from the svg string
+        var paths = svgData.slice(svgData.indexOf('>') + 1);
+        paths = paths.slice(0, -6);
+
+        //clean xml paths
+        paths = paths.replace('xlink:href="#a"', '');
+        paths = paths.replace('xlink:href="#c"', '');
+
+        var fileString = Mustache.render(
+            template, {
+                svg: svgData,
+                paths: paths,
+                className: className
+            }
+        );
+        var absDestPathJs = path.join(outputDirJs, destPath);
+        fs.writeFileSync(absDestPathJs, fileString);
     });
-    //Extract the paths from the svg string
-    var paths = svgData.slice(svgData.indexOf('>') + 1);
-    paths = paths.slice(0, -6);
-    //clean xml paths
-    paths = paths.replace('xlink:href="#a"', '');
-    paths = paths.replace('xlink:href="#c"', '');
 
-    return Mustache.render(
-        template, {
-            svg: svgData,
-            paths: paths,
-            className: className
-        }
-    );
+
+
+
+
 }
 
 if (require.main === module) {
@@ -179,7 +194,7 @@ if (require.main === module) {
 
 module.exports = {
     pascalCase: pascalCase,
-    getFileString: getFileString,
+    processFileString: processFileString,
     processFile: processFile,
     main: main,
     RENAME_FILTER_DEFAULT: RENAME_FILTER_DEFAULT
