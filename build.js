@@ -16,7 +16,6 @@ var Mustache = require('mustache');
 var _ = require('lodash');
 var glob = require('glob');
 var mkdirp = require('mkdirp');
-var sh = require('shelljs');
 var async = require('async');
 var template = fs.readFileSync(path.join(__dirname, './template/msvg.js'), {
     encoding: 'utf8'
@@ -63,7 +62,7 @@ function main(options, cb) {
 
     mkdirp(options.outputDir);
     var files = glob.sync(path.join(options.svgDir, options.glob));
-    var cwd = sh.pwd();
+    var cwd = process.cwd();
     var tasks = [];
     files.forEach(function(svgPath) {
         var svgPathObj = path.parse(svgPath);

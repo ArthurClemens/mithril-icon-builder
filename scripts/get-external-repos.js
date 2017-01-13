@@ -2,7 +2,7 @@
 
 var sh = require('shelljs');
 
-var root = sh.pwd();
+var root = process.cwd();
 var dir = 'external-repos';
 sh.mkdir('-p', dir);
 
@@ -12,7 +12,7 @@ function getMdi() {
     var repoDir = 'MaterialDesign';
     sh.rm('-rf', repoDir);
     sh.mkdir('-p', repoDir);
-    sh.exec('git clone git://github.com/Templarian/MaterialDesign');
+    sh.exec('git clone https://github.com/Templarian/MaterialDesign.git');
 }
 
 getMdi();
