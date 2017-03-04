@@ -7,6 +7,7 @@ Largely copied from [material-ui/icon-builder](https://github.com/callemall/mate
 This tool crawls icon repositories and generates a Mithril element for each SVG file.
 
 
+
 ## Icon repositories
 
 These repositories are crawled:
@@ -14,6 +15,8 @@ These repositories are crawled:
 * [google/material-design-icons](https://github.com/google/material-design-icons)
 * [zavoloklom/material-design-iconic-font](https://github.com/zavoloklom/material-design-iconic-font)
 * [Templarian/MaterialDesign](https://github.com/Templarian/MaterialDesign)
+* [Zondicons](http://www.zondicons.com)
+
 
 
 ## Add your own SVGs
@@ -44,10 +47,12 @@ The built files are in es5 module format and can be used in es5 and es6 projects
 The Mithril elements can be used directly in the JavaScript template:
 
 ~~~javascript
-import stars from 'google/action/stars';
+import stars from "google/action/stars";
 
-m('.my-icon', stars);
+m(".my-icon", stars);
 ~~~
+
+
 
 ## Running the build
 
@@ -55,6 +60,8 @@ m('.my-icon', stars);
 npm install
 npm run build
 ```
+
+
 
 ## Generated folders
 
@@ -64,6 +71,13 @@ Files are written to `build`:
 * `build/svg` - The original SVGs for easy reference
 
 
+
 ## Build options
 
 `node build.js --help` can be used to pull up options available for building.
+
+
+
+## Licence
+
+MIT
