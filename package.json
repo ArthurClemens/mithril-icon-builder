@@ -1,6 +1,6 @@
 {
   "name": "mithril-icon-builder",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Converts SVG icons to Mithril elements.",
   "scripts": {
     "cleanup": "rm -rf ./build && rm -rf ./external-repos",
@@ -9,8 +9,9 @@
     "build-google": "node build.js --output-dir ./build/google --svg-dir ./node_modules/material-design-icons --glob '/**/production/*_24px.svg' --renameFilter ./filters/rename/material-design-icons.js",
     "build-zavoloklom": "node ./build.js --output-dir ./build/zavoloklom --svg-dir ./node_modules/material-design-iconic-font/svg --renameFilter ./filters/rename/zavokolom.js",
     "build-templarian": "node ./build.js --output-dir build/templarian --svg-dir ./external-repos/MaterialDesign/icons/svg",
+    "build-zondicons": "node ./build.js --output-dir build/zondicons --svg-dir ./external-repos/Zondicons/zondicons",
     "build-custom": "node ./build.js --output-dir ./build/custom --svg-dir ./custom",
-    "build": "npm run build-google && npm run build-zavoloklom && npm run build-templarian && npm run build-custom"
+    "build": "npm run build-google && npm run build-zavoloklom && npm run build-templarian && npm run build-zondicons && npm run build-custom"
   },
   "keywords": [
     "Material Design",
@@ -29,17 +30,18 @@
   "dependencies": {
     "material-design-iconic-font": "^2.2.0",
     "material-design-icons": "^3.0.1",
-    "yargs": "^6.6.0"
+    "yargs": "^7.0.1"
   },
   "peerDependencies": {},
   "devDependencies": {
-    "async": "^2.1.4",
-    "babel": "^6.5.2",
+    "adm-zip": "^0.4.7",
+    "async": "^2.1.5",
+    "babel": "^6.23.0",
     "glob": "^7.1.1",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mustache": "^2.3.0",
-    "rimraf": "^2.5.4",
+    "rimraf": "^2.6.1",
     "shelljs": "^0.7.6"
   }
 }
