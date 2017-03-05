@@ -35,9 +35,11 @@ const getZondicons = () => {
       });
       response.on('end', function() {
         const zip = new AdmZip(tmpFilePath)
-        zip.extractAllTo(repoDir + "/" + filename)
+        zip.extractAllTo(repoDir)
         fs.unlink(tmpFilePath, function() {
-          //
+          sh.mv(repoDir + '/zondicons/*.svg', repoDir);
+          sh.rm('-rf', repoDir + '/zondicons');
+          sh.rm('-rf', repoDir + '/__MACOSX');
         })
       })
     });
