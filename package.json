@@ -1,6 +1,6 @@
 {
   "name": "mithril-icon-builder",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Converts SVG icons to Mithril elements.",
   "scripts": {
     "cleanup": "rm -rf ./build && rm -rf ./external-repos",
@@ -30,18 +30,19 @@
   "dependencies": {
     "material-design-iconic-font": "^2.2.0",
     "material-design-icons": "^3.0.1",
-    "yargs": "^7.0.1"
+    "npm-check-updates": "^2.14.0",
+    "yargs": "^11.0.0"
   },
   "peerDependencies": {},
   "devDependencies": {
     "adm-zip": "^0.4.7",
-    "async": "^2.1.5",
+    "async": "^2.6.0",
     "babel": "^6.23.0",
-    "glob": "^7.1.1",
+    "glob": "^7.1.2",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mustache": "^2.3.0",
-    "rimraf": "^2.6.1",
-    "shelljs": "^0.7.6"
+    "rimraf": "^2.6.2",
+    "shelljs": "^0.8.1"
   }
 }
